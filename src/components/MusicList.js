@@ -4,11 +4,11 @@ import { Subject } from "rxjs";
 
 export default function MusicList(props) {
   const [songs, setSongs] = useState([]);
-  const cloud = new CloudProvider();
   const pickSong$ = new Subject();
   pickSong$.subscribe((song) => props.setSong(song));
 
   useEffect(() => {
+    const cloud = new CloudProvider();
     const subscription = cloud.getFiles().subscribe(setSongs);
 
     return () => subscription.unsubscribe();

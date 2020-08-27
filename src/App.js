@@ -39,6 +39,7 @@ function App() {
               });
           }
         });
+      return () => songSubscription.unsubscribe();
     }
   }, [song]);
 
@@ -50,13 +51,15 @@ function App() {
             backgroundColor: "blue",
             height: "50px",
             textAlign: "center",
+            overflow: "hidden",
           }}
         >
-          <h1 style={{ color: "white" }}>Audio Player</h1>{" "}
+          <h1 style={{ color: "white", margin: "0.5%" }}>Audio Player</h1>{" "}
         </nav>
       </header>
       <div>
         <img
+          alt=""
           style={{
             maxHeight: "150px",
             maxWidth: "auto",
@@ -68,10 +71,14 @@ function App() {
         />
         <h2 style={{ color: "blue", textAlign: "center" }}>Audio Player</h2>
       </div>
-      <Player
-        currTime={timeUpdate ? timeUpdate.time : "00:00"}
-        duration={loadedmetadata.data ? loadedmetadata.data.time : "00:00"}
-      />
+      <div
+        style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+      >
+        <Player
+          currTime={timeUpdate ? timeUpdate.time : "00:00"}
+          duration={loadedmetadata.data ? loadedmetadata.data.time : "00:00"}
+        />
+      </div>
       <MusicList song={song} setSong={setSong} />
     </>
   );
