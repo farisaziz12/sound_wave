@@ -22,7 +22,7 @@ export default function Player(props) {
         display: "block",
         marginRight: "auto",
         marginLeft: "auto",
-        width: "33.8%",
+        width: "19.5%",
       }}
     >
       <b>{currTime}</b>

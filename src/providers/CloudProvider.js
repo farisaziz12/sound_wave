@@ -17,7 +17,27 @@ export default class CloudProvider {
       name: "Penny Lane by The Beatles",
     },
   ];
-  getFiles() {
-    return of(this.files);
+
+  async callAPI(searchTerm) {
+    return fetch(
+      `https://deezerdevs-deezer.p.rapidapi.com/search?q=${searchTerm}`,
+      {
+        method: "GET",
+        headers: {
+          "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
+          "x-rapidapi-key":
+            "36d86838d4mshba08a92dbba7104p1ae352jsnf92cd7cb9983",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((response) => response.data)
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  async getFiles(searchTerm) {
+    const data = await this.callAPI(searchTerm);
+    return of(data);
   }
 }
