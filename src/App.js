@@ -13,6 +13,7 @@ function App() {
   const [rgb, setRgb] = useState(undefined);
 
   useEffect(() => {
+    console.log(process.env.API_KEY);
     if (song) {
       const songCoverPlaceholder = document.getElementById("song-cover");
       const player = new AudioProvider();

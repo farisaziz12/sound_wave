@@ -87,9 +87,7 @@ export default function MusicList(props) {
                     marginRight: "auto",
                   }}
                 >
-                  {props.song &&
-                  props.song.title + " by " + props.song.artist.name ===
-                    song.title + " by " + song.artist.name
+                  {props.song && props.song.id === song.id
                     ? "Selected"
                     : "Play"}
                 </button>{" "}
