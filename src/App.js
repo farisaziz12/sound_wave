@@ -7,7 +7,9 @@ import ColorThief from "colorthief/dist/color-thief.mjs";
 
 function App() {
   const player = new AudioProvider();
+  const [songs, setSongs] = useState([]);
   const [song, setSong] = useState(undefined);
+  const [currSongIndex, setCurrSongIndex] = useState(undefined);
   const [loadedmetadata, setLoadedmetadata] = useState({});
   const [timeUpdate, setTimeUpdate] = useState(undefined);
   const [rgb, setRgb] = useState(undefined);
@@ -27,6 +29,7 @@ function App() {
         });
       }
 
+      setCurrSongIndex(songs.indexOf(song));
       setAudioPlayer(player);
 
       const songSubscription = player.playStream(url).subscribe((event) => {
@@ -54,6 +57,20 @@ function App() {
       return () => songSubscription.unsubscribe();
     }
   }, [song]);
+
+  const nextOrLastSong = (position) => {
+    if (position === "next") {
+      const nextSong = songs[currSongIndex + 1];
+      if (nextSong) {
+        setSong(nextSong);
+      }
+    } else {
+      const prevSong = songs[currSongIndex - 1];
+      if (prevSong) {
+        setSong(prevSong);
+      }
+    }
+  };
 
   return (
     <div
@@ -121,9 +138,15 @@ function App() {
           play={() => audioPlayer.play()}
           pause={() => audioPlayer.pause()}
           duration={loadedmetadata.data ? loadedmetadata.data.time : "00:00"}
+          nextOrLastSong={nextOrLastSong}
         />
       </div>
-      <MusicList song={song} setSong={setSong} />
+      <MusicList
+        songs={songs}
+        setSongs={setSongs}
+        song={song}
+        setSong={setSong}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function Player(props) {
-  const { currTime, duration, play, pause, song } = props;
+  const { currTime, duration, play, pause, song, nextOrLastSong } = props;
   const [currTimeSec, setCurrTimeSec] = useState(0);
   const [durationSec, setDurationSec] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -54,14 +54,14 @@ export default function Player(props) {
           justifyContent: "center",
         }}
       >
-        <button onClick={handlePlay}>{"<<"}</button>
+        <button onClick={() => nextOrLastSong("last")}>{"<<"}</button>
         <button
           style={{ marginLeft: "2%", marginRight: "2%", width: "50px" }}
           onClick={handlePlay}
         >
           {!paused ? "►" : "❚❚"}
         </button>
-        <button onClick={handlePlay}>{">>"}</button>
+        <button onClick={() => nextOrLastSong("next")}>{">>"}</button>
       </div>
     </div>
   );

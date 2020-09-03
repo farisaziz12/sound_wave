@@ -4,10 +4,11 @@ import { Subject, BehaviorSubject, Subscription } from "rxjs";
 import { debounceTime, filter } from "rxjs/operators";
 
 export default function MusicList(props) {
-  const [songs, setSongs] = useState([]);
   const pickSong$ = new Subject();
   const search$ = new BehaviorSubject("");
   pickSong$.subscribe((song) => props.setSong(song));
+
+  const { songs, setSongs } = props;
 
   //   useEffect(() => {
   //     const cloud = new CloudProvider();
@@ -66,20 +67,33 @@ export default function MusicList(props) {
             <>
               <div
                 key={song.id}
-                style={{
-                  backgroundColor: "white",
-                  color: "black",
-                  width: "200px",
-                  textAlign: "center",
-                  display: "inline-block",
-                  marginLeft: "4%",
-                  marginBottom: "2%",
-                }}
+                style={
+                  props.song && props.song.id === song.id
+                    ? {
+                        backgroundColor: "white",
+                        color: "black",
+                        width: "200px",
+                        textAlign: "center",
+                        display: "inline-block",
+                        marginLeft: "4%",
+                        marginBottom: "2%",
+                        border: "solid 3px white",
+                      }
+                    : {
+                        backgroundColor: "white",
+                        color: "black",
+                        width: "200px",
+                        textAlign: "center",
+                        display: "inline-block",
+                        marginLeft: "4%",
+                        marginBottom: "2%",
+                      }
+                }
               >
                 <img
                   alt=""
                   src={song.album.cover_big}
-                  style={{ height: "auto", width: "200px" }}
+                  style={{ maxHeight: "200px", widht: "auto" }}
                 />
                 <p style={{ marginLeft: "2%" }}>
                   {song.title + " by " + song.artist.name}
