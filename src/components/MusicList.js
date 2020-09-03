@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CloudProvider from "../providers/CloudProvider";
-import { Subject, BehaviorSubject } from "rxjs";
+import { Subject, BehaviorSubject, Subscription } from "rxjs";
 import { debounceTime, filter } from "rxjs/operators";
 
 export default function MusicList(props) {
@@ -9,13 +9,13 @@ export default function MusicList(props) {
   const search$ = new BehaviorSubject("");
   pickSong$.subscribe((song) => props.setSong(song));
 
-  useEffect(() => {
-    const cloud = new CloudProvider();
-    const subscription = cloud
-      .getFiles()
-      .then((data) => data.subscribe(setSongs));
-    return () => subscription.unsubscribe();
-  }, []);
+  //   useEffect(() => {
+  //     const cloud = new CloudProvider();
+  //     const subscription = cloud
+  //       .getFiles()
+  //       .then((data) => data.subscribe(setSongs));
+  //     return subscription ? () => subscription.unsubscribe() : null;
+  //   }, []);
 
   useEffect(() => {
     search$
@@ -50,6 +50,9 @@ export default function MusicList(props) {
         onChange={handleSearch}
         placeholder="Search"
         style={{
+          height: "25px",
+          width: "250px",
+          borderRadius: "12px",
           display: "block",
           marginLeft: "auto",
           marginRight: "auto",
@@ -58,43 +61,44 @@ export default function MusicList(props) {
         type="text"
       />
       <div>
-        {songs.map((song) => (
-          <>
-            <div
-              key={song.id}
-              style={{
-                backgroundColor: "white",
-                color: "black",
-                width: "200px",
-                textAlign: "center",
-                display: "inline-block",
-                marginLeft: "4%",
-                marginBottom: "2%",
-              }}
-            >
-              <img
-                src={song.album.cover_big}
-                style={{ height: "auto", width: "200px" }}
-              />
-              <p style={{ marginLeft: "2%" }}>
-                {song.title + " by " + song.artist.name}
-                <button
-                  onClick={() => handleClick(song)}
-                  style={{
-                    marginRight: "5%",
-                    display: "block",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                >
-                  {props.song && props.song.id === song.id
-                    ? "Selected"
-                    : "Play"}
-                </button>{" "}
-              </p>
-            </div>
-          </>
-        ))}
+        {songs &&
+          songs.map((song) => (
+            <>
+              <div
+                key={song.id}
+                style={{
+                  backgroundColor: "white",
+                  color: "black",
+                  width: "200px",
+                  textAlign: "center",
+                  display: "inline-block",
+                  marginLeft: "4%",
+                  marginBottom: "2%",
+                }}
+              >
+                <img
+                  alt=""
+                  src={song.album.cover_big}
+                  style={{ height: "auto", width: "200px" }}
+                />
+                <p style={{ marginLeft: "2%" }}>
+                  {song.title + " by " + song.artist.name}
+                  <button
+                    onClick={() => handleClick(song)}
+                    style={{
+                      display: "block",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    {props.song && props.song.id === song.id
+                      ? "Selected"
+                      : "Play"}
+                  </button>{" "}
+                </p>
+              </div>
+            </>
+          ))}
       </div>
     </div>
   );

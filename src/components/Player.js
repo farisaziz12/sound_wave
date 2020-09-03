@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 export default function Player(props) {
-  const { currTime, duration } = props;
+  const { currTime, duration, play, pause, song } = props;
   const [currTimeSec, setCurrTimeSec] = useState(0);
   const [durationSec, setDurationSec] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const currTimeSeconds =
@@ -16,21 +17,52 @@ export default function Player(props) {
     setDurationSec(durationSeconds);
   }, [currTime, duration]);
 
+  const handlePlay = () => {
+    if (song) {
+      setPaused(!paused);
+      if (paused) {
+        play();
+      } else {
+        console.log(pause());
+        pause();
+      }
+    }
+  };
   return (
-    <div
-      style={{
-        display: "block",
-        marginRight: "auto",
-        marginLeft: "auto",
-        width: "19.5%",
-      }}
-    >
-      <b>{currTime}</b>
-      <progress
-        value={currTimeSec && durationSec ? currTimeSec / durationSec : 0}
-        max="1"
-      ></progress>
-      <b>{duration}</b>
+    <div>
+      <div
+        style={{
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "3%",
+        }}
+      >
+        <b>{currTime}</b>
+        <progress
+          style={{ marginLeft: "1%", marginRight: "1%" }}
+          value={currTimeSec && durationSec ? currTimeSec / durationSec : 0}
+          max="1"
+        ></progress>
+        <b>{duration}</b>
+      </div>
+
+      <div
+        style={{
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <button onClick={handlePlay}>{"<<"}</button>
+        <button
+          style={{ marginLeft: "2%", marginRight: "2%", width: "50px" }}
+          onClick={handlePlay}
+        >
+          {!paused ? "►" : "❚❚"}
+        </button>
+        <button onClick={handlePlay}>{">>"}</button>
+      </div>
     </div>
   );
 }

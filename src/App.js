@@ -6,18 +6,17 @@ import Player from "../src/components/Player";
 import ColorThief from "colorthief/dist/color-thief.mjs";
 
 function App() {
+  const player = new AudioProvider();
   const [song, setSong] = useState(undefined);
-  const [canPlay, setCanPlay] = useState(false);
   const [loadedmetadata, setLoadedmetadata] = useState({});
   const [timeUpdate, setTimeUpdate] = useState(undefined);
   const [rgb, setRgb] = useState(undefined);
+  const [audioPlayer, setAudioPlayer] = useState(undefined);
 
   useEffect(() => {
-    console.log(process.env.API_KEY);
     if (song) {
-      const songCoverPlaceholder = document.getElementById("song-cover");
-      const player = new AudioProvider();
       const url = song.preview;
+      const songCoverPlaceholder = document.getElementById("song-cover");
       const colorThief = new ColorThief();
 
       if (songCoverPlaceholder.complete) {
@@ -28,13 +27,13 @@ function App() {
         });
       }
 
+      setAudioPlayer(player);
+
       const songSubscription = player.playStream(url).subscribe((event) => {
         const audioObj = event.target;
+        console.log(event.type);
 
         switch (event.type) {
-          case "canplay":
-            return setCanPlay(true);
-
           case "loadedmetadata":
             return setLoadedmetadata({
               value: true,
@@ -46,7 +45,7 @@ function App() {
             });
 
           case "timeupdate":
-            setTimeUpdate({
+            return setTimeUpdate({
               timeSec: audioObj.currentTime,
               time: player.formatTime(audioObj.currentTime * 1000, "mm:ss"),
             });
@@ -90,6 +89,7 @@ function App() {
               marginRight: "auto",
               marginLeft: "auto",
               display: "block",
+              border: "solid 1px white",
             }}
             src={song.album.cover_big}
           />
@@ -116,7 +116,10 @@ function App() {
         style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
       >
         <Player
+          song={song}
           currTime={timeUpdate ? timeUpdate.time : "00:00"}
+          play={() => audioPlayer.play()}
+          pause={() => audioPlayer.pause()}
           duration={loadedmetadata.data ? loadedmetadata.data.time : "00:00"}
         />
       </div>
