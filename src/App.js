@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, fromEvent, timer } from "rxjs";
+import { debounce, distinct } from "rxjs/operators";
 import "./App.css";
 import MusicList from "./components/MusicList";
 import AudioProvider from "./providers/AudioProvider";
@@ -10,6 +11,7 @@ import Recorder from "./components/Recorder";
 function App() {
   const player = new AudioProvider();
   const search$ = new BehaviorSubject("");
+
   const [songs, setSongs] = useState([]);
   const [song, setSong] = useState(undefined);
   const [currSongIndex, setCurrSongIndex] = useState(undefined);
@@ -17,6 +19,47 @@ function App() {
   const [timeUpdate, setTimeUpdate] = useState(undefined);
   const [rgb, setRgb] = useState(undefined);
   const [audioPlayer, setAudioPlayer] = useState(undefined);
+  const [songOnHover, setSongOnHover] = useState(undefined);
+
+  useEffect(() => {
+    const musicList = document.getElementById("music-list");
+    const mouseEvent = fromEvent(musicList, "mousemove");
+    const subscription = mouseEvent
+      .pipe(
+        distinct(),
+        debounce(() => timer(100))
+      )
+      .subscribe((e) => {
+        const songId =
+          parseInt(e.target.id).toString() === "NaN"
+            ? undefined
+            : parseInt(e.target.id);
+
+        if (typeof songId === "number") {
+          const matchedSong = songs.find((song) => song.id === songId);
+
+          if (matchedSong) {
+            setSongOnHover(matchedSong);
+          }
+        } else if (typeof e.target.id === "string") {
+          setSongOnHover(undefined);
+        }
+      });
+    return () => subscription.unsubscribe();
+  }, [songs]);
+
+  useEffect(() => {
+    const musicList = document.getElementById("music-list");
+    const mouseClick = fromEvent(musicList, "click");
+
+    const subscription = mouseClick.subscribe(() => {
+      if (songOnHover) {
+        setSong(songOnHover);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [songOnHover]);
 
   useEffect(() => {
     if (song) {
@@ -28,7 +71,11 @@ function App() {
         setRgb(colorThief.getColor(songCoverPlaceholder));
       } else {
         songCoverPlaceholder.addEventListener("load", () => {
-          setRgb(colorThief.getColor(songCoverPlaceholder));
+          try {
+            setRgb(colorThief.getColor(songCoverPlaceholder));
+          } catch (error) {
+            console.log(error);
+          }
         });
       }
 
@@ -104,7 +151,7 @@ function App() {
             overflow: "hidden",
           }}
         >
-          <h1 style={{ color: "white", margin: "1%" }}>Audio Player</h1>{" "}
+          <h1 style={{ color: "white", margin: "1%" }}>Sound Wave</h1>{" "}
         </nav>
       </header>
       <div>
@@ -161,7 +208,10 @@ function App() {
           handleShuffle={handleShuffle}
         />
       </div>
-      <Recorder handleRecognisedSong={handleRecognisedSong} />
+      <Recorder
+        handleRecognisedSong={handleRecognisedSong}
+        audioPlayer={audioPlayer}
+      />
       <MusicList
         search$={search$}
         songs={songs}

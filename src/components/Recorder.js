@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import * as $ from "jquery";
+import "../App.css";
 
 export default function Recorder(props) {
-  const { handleRecognisedSong } = props;
+  const { handleRecognisedSong, audioPlayer } = props;
   const [recording, setRecording] = useState(false);
   const [noMatchError, setNoMatchError] = useState(false);
 
@@ -24,6 +25,7 @@ export default function Recorder(props) {
     setTimeout(() => {
       mediaRecorder.stop();
       setRecording(false);
+      audioPlayer.play();
     }, 8000);
   };
 
@@ -58,6 +60,7 @@ export default function Recorder(props) {
   };
 
   const startRecording = () => {
+    audioPlayer.pause();
     setRecording(true);
     navigator.mediaDevices
       .getUserMedia({
@@ -70,15 +73,11 @@ export default function Recorder(props) {
 
   return (
     <div>
-      <button
-        style={{ display: "block", marginRight: "auto", marginLeft: "auto" }}
-        onClick={startRecording}
-      >
+      <button className="record-button center" onClick={startRecording}>
         {recording ? "Recording..." : "Record"}
       </button>
-      <p style={{ textAlign: "center", color: "red" }}>
-        {noMatchError && "No Match Found"}
-      </p>
+      <p className="info-txt">Record a sample of a song to find matches</p>
+      <p className="error-txt">{noMatchError && "No Match Found"}</p>
     </div>
   );
 }
