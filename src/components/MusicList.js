@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import CloudProvider from "../providers/CloudProvider";
-import { Subject, BehaviorSubject, Subscription } from "rxjs";
-import { debounceTime, filter } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { debounceTime, filter, retry } from "rxjs/operators";
 
 export default function MusicList(props) {
+  const { search$ } = props;
   const pickSong$ = new Subject();
-  const search$ = new BehaviorSubject("");
+
   pickSong$.subscribe((song) => props.setSong(song));
 
   const { songs, setSongs } = props;
@@ -26,13 +27,7 @@ export default function MusicList(props) {
       )
       .subscribe((search) => {
         const cloud = new CloudProvider();
-        cloud
-          .getFiles(search)
-          .then((songs) =>
-            songs
-              .pipe(filter((song) => song.title !== "Undefined"))
-              .subscribe(setSongs)
-          );
+        cloud.getFiles(search).then((songs) => songs.subscribe(setSongs));
       });
   }, [search$]);
 

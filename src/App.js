@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { BehaviorSubject } from "rxjs";
 import "./App.css";
 import MusicList from "./components/MusicList";
 import AudioProvider from "./providers/AudioProvider";
 import Player from "../src/components/Player";
 import ColorThief from "colorthief/dist/color-thief.mjs";
+import Recorder from "./components/Recorder";
 
 function App() {
   const player = new AudioProvider();
+  const search$ = new BehaviorSubject("");
   const [songs, setSongs] = useState([]);
   const [song, setSong] = useState(undefined);
   const [currSongIndex, setCurrSongIndex] = useState(undefined);
@@ -72,6 +75,15 @@ function App() {
     }
   };
 
+  const handleRecognisedSong = (titleAndArtist) => {
+    search$.next(titleAndArtist);
+  };
+
+  const handleShuffle = () => {
+    const randomSong = songs[Math.floor(Math.random() * songs.length)];
+    setSong(randomSong);
+  };
+
   return (
     <div
       className="background"
@@ -130,7 +142,12 @@ function App() {
         </h2>
       </div>
       <div
-        style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        style={{
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginBottom: "2%",
+        }}
       >
         <Player
           song={song}
@@ -139,9 +156,12 @@ function App() {
           pause={() => audioPlayer.pause()}
           duration={loadedmetadata.data ? loadedmetadata.data.time : "00:00"}
           nextOrLastSong={nextOrLastSong}
+          handleShuffle={handleShuffle}
         />
       </div>
+      <Recorder handleRecognisedSong={handleRecognisedSong} />
       <MusicList
+        search$={search$}
         songs={songs}
         setSongs={setSongs}
         song={song}

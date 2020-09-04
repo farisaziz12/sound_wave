@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 export default function Player(props) {
-  const { currTime, duration, play, pause, song, nextOrLastSong } = props;
+  const {
+    currTime,
+    duration,
+    play,
+    pause,
+    song,
+    nextOrLastSong,
+    handleShuffle,
+  } = props;
   const [currTimeSec, setCurrTimeSec] = useState(0);
   const [durationSec, setDurationSec] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -23,7 +31,6 @@ export default function Player(props) {
       if (paused) {
         play();
       } else {
-        console.log(pause());
         pause();
       }
     }
@@ -35,7 +42,7 @@ export default function Player(props) {
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
-          marginBottom: "3%",
+          marginBottom: "2%",
         }}
       >
         <b>{currTime}</b>
@@ -63,6 +70,17 @@ export default function Player(props) {
         </button>
         <button onClick={() => nextOrLastSong("next")}>{">>"}</button>
       </div>
+      <button
+        onClick={handleShuffle}
+        style={{
+          display: "block",
+          marginTop: "2%",
+          marginRight: "auto",
+          marginLeft: "auto",
+        }}
+      >
+        Shuffle
+      </button>
     </div>
   );
 }
