@@ -4,6 +4,7 @@ import * as $ from "jquery";
 export default function Recorder(props) {
   const { handleRecognisedSong } = props;
   const [recording, setRecording] = useState(false);
+  const [noMatchError, setNoMatchError] = useState(false);
 
   const handleStream = (stream) => {
     const options = { mimeType: "audio/webm" };
@@ -47,7 +48,10 @@ export default function Recorder(props) {
 
         if (response.result) {
           const { title, artist } = response.result;
+          setNoMatchError(false);
           handleRecognisedSong(title + " " + artist);
+        } else {
+          setNoMatchError(true);
         }
       });
     };
@@ -72,6 +76,9 @@ export default function Recorder(props) {
       >
         {recording ? "Recording..." : "Record"}
       </button>
+      <p style={{ textAlign: "center", color: "red" }}>
+        {noMatchError && "No Match Found"}
+      </p>
     </div>
   );
 }

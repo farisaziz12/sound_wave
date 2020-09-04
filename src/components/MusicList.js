@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CloudProvider from "../providers/CloudProvider";
 import { Subject } from "rxjs";
-import { debounceTime, filter, retry } from "rxjs/operators";
+import { debounceTime, filter, map } from "rxjs/operators";
 
 export default function MusicList(props) {
   const { search$ } = props;
@@ -23,7 +23,13 @@ export default function MusicList(props) {
     search$
       .pipe(
         debounceTime(300),
-        filter((search) => search !== "")
+        filter((search) => search !== ""),
+        map((search) =>
+          search
+            .split(" ")
+            .filter((word) => !word.includes("by"))
+            .join(" ")
+        )
       )
       .subscribe((search) => {
         const cloud = new CloudProvider();
