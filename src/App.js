@@ -55,6 +55,8 @@ function App() {
               timeSec: audioObj.currentTime,
               time: player.formatTime(audioObj.currentTime * 1000, "mm:ss"),
             });
+
+          default:
         }
       });
       return () => songSubscription.unsubscribe();

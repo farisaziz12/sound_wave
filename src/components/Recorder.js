@@ -34,7 +34,7 @@ export default function Recorder(props) {
       const base64String = reader.result;
 
       const data = {
-        api_token: "4b85c24a69e61c34aede5c3fd7a638a7",
+        api_token: process.env.REACT_APP_AUDD_API_KEY,
         audio: base64String.substr(base64String.indexOf(",") + 1),
         return: "apple_music,spotify",
       };

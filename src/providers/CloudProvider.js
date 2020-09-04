@@ -25,8 +25,7 @@ export default class CloudProvider {
         method: "GET",
         headers: {
           "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
-          "x-rapidapi-key":
-            "36d86838d4mshba08a92dbba7104p1ae352jsnf92cd7cb9983",
+          "x-rapidapi-key": process.env.REACT_APP_DEEZER_API_KEY,
         },
       }
     )
