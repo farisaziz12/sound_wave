@@ -6,18 +6,11 @@ import { debounceTime, filter, map } from "rxjs/operators";
 export default function MusicList(props) {
   const { search$ } = props;
   const pickSong$ = new Subject();
+  const [noResults, setNoResults] = useState(false);
 
   pickSong$.subscribe((song) => props.setSong(song));
 
   const { songs, setSongs } = props;
-
-  //   useEffect(() => {
-  //     const cloud = new CloudProvider();
-  //     const subscription = cloud
-  //       .getFiles()
-  //       .then((data) => data.subscribe(setSongs));
-  //     return subscription ? () => subscription.unsubscribe() : null;
-  //   }, []);
 
   useEffect(() => {
     search$
@@ -33,7 +26,16 @@ export default function MusicList(props) {
       )
       .subscribe((search) => {
         const cloud = new CloudProvider();
-        cloud.getFiles(search).then((songs) => songs.subscribe(setSongs));
+        cloud.getFiles(search).then((songs) =>
+          songs.subscribe((songsArr) => {
+            if (songsArr[0]) {
+              setSongs(songsArr);
+              setNoResults(false);
+            } else {
+              setNoResults(true);
+            }
+          })
+        );
       });
   }, [search$]);
 
@@ -63,6 +65,9 @@ export default function MusicList(props) {
         type="text"
       />
       <div>
+        {noResults && (
+          <p style={{ textAlign: "center", color: "red" }}>No Results</p>
+        )}
         {songs &&
           songs.map((song) => (
             <>
