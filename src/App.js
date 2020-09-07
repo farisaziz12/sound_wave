@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { BehaviorSubject, fromEvent, timer } from "rxjs";
 import { debounce, distinct } from "rxjs/operators";
-import "./App.css";
+import invert from "invert-color";
 import MusicList from "./components/MusicList";
 import AudioProvider from "./providers/AudioProvider";
 import Player from "../src/components/Player";
 import ColorThief from "colorthief/dist/color-thief.mjs";
 import Recorder from "./components/Recorder";
+import "./App.css";
 
 function App() {
   const player = new AudioProvider();
@@ -18,8 +19,10 @@ function App() {
   const [loadedmetadata, setLoadedmetadata] = useState({});
   const [timeUpdate, setTimeUpdate] = useState(undefined);
   const [rgb, setRgb] = useState(undefined);
+  const [invertedColor, setInvertedColor] = useState(undefined);
   const [audioPlayer, setAudioPlayer] = useState(undefined);
   const [songOnHover, setSongOnHover] = useState(undefined);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const musicList = document.getElementById("music-list");
@@ -72,7 +75,9 @@ function App() {
       } else {
         songCoverPlaceholder.addEventListener("load", () => {
           try {
-            setRgb(colorThief.getColor(songCoverPlaceholder));
+            const backgroundColor = colorThief.getColor(songCoverPlaceholder);
+            setRgb(backgroundColor);
+            setInvertedColor(invert(backgroundColor));
           } catch (error) {
             console.log(error);
           }
@@ -96,6 +101,12 @@ function App() {
                 mediaType: "mp3",
               },
             });
+
+          case "play":
+            return setPaused(false);
+
+          case "pause":
+            return setPaused(true);
 
           case "timeupdate":
             return setTimeUpdate({
@@ -135,11 +146,17 @@ function App() {
 
   return (
     <div
-      className="background"
       style={
         rgb
-          ? { backgroundColor: `RGB(${rgb})`, transition: "ease-in 1s" }
-          : null
+          ? {
+              backgroundColor: `RGB(${rgb})`,
+              transition: "ease-in 1s",
+              color: invertedColor,
+            }
+          : {
+              height: "330vh",
+              background: "linear-gradient(to right, #654ea3, #eaafc8)",
+            }
       }
     >
       <header>
@@ -199,6 +216,8 @@ function App() {
         }}
       >
         <Player
+          paused={paused}
+          setPaused={setPaused}
           song={song}
           currTime={timeUpdate ? timeUpdate.time : "00:00"}
           play={() => audioPlayer.play()}
@@ -209,6 +228,7 @@ function App() {
         />
       </div>
       <Recorder
+        setPaused={setPaused}
         handleRecognisedSong={handleRecognisedSong}
         audioPlayer={audioPlayer}
       />

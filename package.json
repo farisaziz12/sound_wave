@@ -7,10 +7,12 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "colorthief": "^2.3.2",
+    "invert-color": "^2.0.0",
     "jquery": "^3.5.1",
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-lottie": "^1.2.3",
     "react-scripts": "3.4.3",
     "rxjs": "^6.6.2"
   },

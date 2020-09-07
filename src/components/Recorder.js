@@ -1,11 +1,22 @@
 import React, { useState } from "react";
+import Lottie from "react-lottie";
+import animationData from "../lotties/music-fly.json";
 import * as $ from "jquery";
 import "../App.css";
 
 export default function Recorder(props) {
-  const { handleRecognisedSong, audioPlayer } = props;
+  const { handleRecognisedSong, audioPlayer, setPaused } = props;
   const [recording, setRecording] = useState(false);
   const [noMatchError, setNoMatchError] = useState(false);
+
+  const lottieOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   const handleStream = (stream) => {
     const options = { mimeType: "audio/webm" };
@@ -25,7 +36,6 @@ export default function Recorder(props) {
     setTimeout(() => {
       mediaRecorder.stop();
       setRecording(false);
-      audioPlayer.play();
     }, 8000);
   };
 
@@ -60,7 +70,10 @@ export default function Recorder(props) {
   };
 
   const startRecording = () => {
-    audioPlayer.pause();
+    if (audioPlayer) {
+      audioPlayer.pause();
+      setPaused(true);
+    }
     setRecording(true);
     navigator.mediaDevices
       .getUserMedia({
@@ -73,9 +86,13 @@ export default function Recorder(props) {
 
   return (
     <div>
-      <button className="record-button center" onClick={startRecording}>
-        {recording ? "Recording..." : "Record"}
-      </button>
+      {recording ? (
+        <Lottie options={lottieOptions} height={150} width={150} />
+      ) : (
+        <button className="record-button center" onClick={startRecording}>
+          Identify Song
+        </button>
+      )}
       <p className="info-txt">Record a sample of a song to find matches</p>
       <p className="error-txt">{noMatchError && "No Match Found"}</p>
     </div>

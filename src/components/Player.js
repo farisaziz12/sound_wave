@@ -9,10 +9,11 @@ export default function Player(props) {
     song,
     nextOrLastSong,
     handleShuffle,
+    paused,
+    setPaused,
   } = props;
   const [currTimeSec, setCurrTimeSec] = useState(0);
   const [durationSec, setDurationSec] = useState(0);
-  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const currTimeSeconds =
@@ -66,7 +67,7 @@ export default function Player(props) {
           style={{ marginLeft: "2%", marginRight: "2%", width: "50px" }}
           onClick={handlePlay}
         >
-          {!paused ? "►" : "❚❚"}
+          {paused ? "►" : "❚❚"}
         </button>
         <button onClick={() => nextOrLastSong("next")}>{">>"}</button>
       </div>

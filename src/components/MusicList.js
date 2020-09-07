@@ -57,7 +57,7 @@ export default function MusicList(props) {
         className="search-input"
         type="text"
       />
-      <div>
+      <div style={{ marginTop: "2%" }}>
         {noResults && <p className="error-txt">No Results</p>}
         {songs &&
           songs.map((song) => (
