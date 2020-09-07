@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../App.css";
 
 export default function Player(props) {
   const {
@@ -11,6 +12,7 @@ export default function Player(props) {
     handleShuffle,
     paused,
     setPaused,
+    invertedColor,
   } = props;
   const [currTimeSec, setCurrTimeSec] = useState(0);
   const [durationSec, setDurationSec] = useState(0);
@@ -62,14 +64,45 @@ export default function Player(props) {
           justifyContent: "center",
         }}
       >
-        <button onClick={() => nextOrLastSong("last")}>{"<<"}</button>
         <button
-          style={{ marginLeft: "2%", marginRight: "2%", width: "50px" }}
+          style={
+            invertedColor
+              ? {
+                  color: invertedColor,
+                }
+              : { color: "white" }
+          }
+          className="prev-btn"
+          onClick={() => nextOrLastSong("last")}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="play-pause-btn"
+          style={
+            invertedColor
+              ? {
+                  color: invertedColor,
+                }
+              : { color: "white" }
+          }
           onClick={handlePlay}
         >
           {paused ? "►" : "❚❚"}
         </button>
-        <button onClick={() => nextOrLastSong("next")}>{">>"}</button>
+        <button
+          style={
+            invertedColor
+              ? {
+                  color: invertedColor,
+                }
+              : { color: "white" }
+          }
+          className="next-btn"
+          onClick={() => nextOrLastSong("next")}
+        >
+          {">>"}
+        </button>
       </div>
       <button
         onClick={handleShuffle}

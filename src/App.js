@@ -77,7 +77,7 @@ function App() {
           try {
             const backgroundColor = colorThief.getColor(songCoverPlaceholder);
             setRgb(backgroundColor);
-            setInvertedColor(invert(backgroundColor));
+            setInvertedColor(invert(backgroundColor, true));
           } catch (error) {
             console.log(error);
           }
@@ -216,6 +216,7 @@ function App() {
         }}
       >
         <Player
+          invertedColor={invertedColor}
           paused={paused}
           setPaused={setPaused}
           song={song}

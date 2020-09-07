@@ -86,6 +86,41 @@
 
 .info-txt {
   text-align: center;
-  /* opacity: 0.5; */
   font-size: 14px;
+}
+
+.play-pause-btn {
+  margin-left: 2%;
+  margin-right: 2%;
+  width: 50px;
+  background-color: transparent;
+  border: none;
+  font-size: 22px;
+  transition: ease 0.1s;
+}
+
+.play-pause-btn:hover {
+  font-size: 26px;
+}
+
+.next-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 22px;
+  transition: ease 0.1s;
+}
+
+.next-btn:hover {
+  font-size: 26px;
+}
+
+.prev-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 22px;
+  transition: ease 0.1s;
+}
+
+.prev-btn:hover {
+  font-size: 26px;
 }
