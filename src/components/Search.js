@@ -31,6 +31,7 @@ export default function Search(props) {
       recognition.onerror = function (event) {
         if (event.error === "no-speech") {
           setRecognitionError(true);
+          setRecognising(false);
         }
       };
       recognition.onresult = function (event) {
@@ -74,9 +75,13 @@ export default function Search(props) {
           value={search}
         />
         <button onClick={handleClick} className="dictate-btn">
-          <span role="img" aria-label="">
-            🎤
-          </span>
+          {recognising ? (
+            "..."
+          ) : (
+            <span role="img" aria-label="">
+              🎤
+            </span>
+          )}
         </button>
       </div>
       <p style={{ textAlign: "center" }}>
