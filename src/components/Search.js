@@ -4,7 +4,9 @@ import "../App.css";
 export default function Search(props) {
   const { search$, audioPlayer } = props;
   const [recognition, setRecognition] = useState(undefined);
+  // eslint-disable-next-line
   const [recognising, setRecognising] = useState(false);
+  // eslint-disable-next-line
   const [recognitionError, setRecognitionError] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -41,10 +43,12 @@ export default function Search(props) {
         search$.next(transcript);
       };
     }
+    // eslint-disable-next-line
   }, [recognition]);
 
   useEffect(() => {
     search$.next(search);
+    // eslint-disable-next-line
   }, [search]);
 
   const handleSearch = (e) => {

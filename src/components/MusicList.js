@@ -38,6 +38,7 @@ export default function MusicList(props) {
           })
         );
       });
+    // eslint-disable-next-line
   }, [search$]);
 
   const handleClick = (song) => {

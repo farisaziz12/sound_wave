@@ -120,6 +120,7 @@ function App() {
       });
       return () => songSubscription.unsubscribe();
     }
+    // eslint-disable-next-line
   }, [song]);
 
   const nextOrLastSong = (position) => {
