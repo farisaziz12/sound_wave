@@ -116,7 +116,7 @@ export default function Player(props) {
           fontSize: "30px",
         }}
       >
-        <span aria-label role="img">
+        <span aria-label="" role="img">
           🔀
         </span>
       </button>
