@@ -8,6 +8,7 @@ import Player from "../src/components/Player";
 import ColorThief from "colorthief/dist/color-thief.mjs";
 import Recorder from "./components/Recorder";
 import "./App.css";
+import Search from "./components/Search";
 
 function App() {
   const player = new AudioProvider();
@@ -233,6 +234,7 @@ function App() {
         handleRecognisedSong={handleRecognisedSong}
         audioPlayer={audioPlayer}
       />
+      <Search audioPlayer={audioPlayer} search$={search$} />
       <MusicList
         search$={search$}
         songs={songs}

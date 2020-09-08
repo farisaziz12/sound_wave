@@ -44,19 +44,8 @@ export default function MusicList(props) {
     pickSong$.next(song);
   };
 
-  const handleSearch = (e) => {
-    search$.next(e.target.value);
-  };
-
   return (
     <div id="music-list">
-      <h3 style={{ textAlign: "center" }}>Search Songs</h3>
-      <input
-        onChange={handleSearch}
-        placeholder="Search"
-        className="search-input"
-        type="text"
-      />
       <div style={{ marginTop: "2%" }}>
         {noResults && <p className="error-txt">No Results</p>}
         {songs &&
@@ -78,7 +67,10 @@ export default function MusicList(props) {
                 />
                 <p id={song.id} style={{ marginLeft: "2%" }}>
                   {song.title + " by " + song.artist.name}
-                  <button onClick={() => handleClick(song)} className="center">
+                  <button
+                    onClick={() => handleClick(song)}
+                    className="center play-song-btn"
+                  >
                     {props.song && props.song.id === song.id
                       ? "Selected"
                       : "Play"}

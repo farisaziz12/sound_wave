@@ -111,9 +111,14 @@ export default function Player(props) {
           marginTop: "2%",
           marginRight: "auto",
           marginLeft: "auto",
+          background: "none",
+          border: "none",
+          fontSize: "30px",
         }}
       >
-        Shuffle
+        <span aria-label role="img">
+          🔀
+        </span>
       </button>
     </div>
   );
