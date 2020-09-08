@@ -75,6 +75,9 @@ export default function Search(props) {
           </span>
         </button>
       </div>
+      <p style={{ textAlign: "center" }}>
+        Click the microphone to search a song name by dictation
+      </p>
     </div>
   );
 }
