@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import AudioRecorder from "audio-recorder-polyfill";
 import Lottie from "react-lottie";
 import animationData from "../lotties/music-fly.json";
 import * as $ from "jquery";
 import "../App.css";
+import MediaRecorder from "audio-recorder-polyfill";
 
 export default function Recorder(props) {
   const { handleRecognisedSong, audioPlayer, setPaused } = props;
@@ -18,20 +20,31 @@ export default function Recorder(props) {
     },
   };
 
+  const getMediaRecorder = (stream, options) => {
+    let mediaRecorder;
+    if (navigator.userAgent.indexOf("Safari") !== -1) {
+      window.mediaRecorder = AudioRecorder;
+      mediaRecorder = new MediaRecorder(stream, options);
+    } else {
+      mediaRecorder = new MediaRecorder(stream, options);
+    }
+    return mediaRecorder;
+  };
+
   const handleStream = (stream) => {
     const options = { mimeType: "audio/webm" };
-    const mediaRecorder = new MediaRecorder(stream, options);
+    const mediaRecorder = getMediaRecorder(stream, options);
 
-    mediaRecorder.ondataavailable = (e) => {
+    mediaRecorder.addEventListener("dataavailable", (e) => {
       const recordedChunks = [];
       if (e.data.size > 0) {
         recordedChunks.push(e.data);
       }
-
       mediaRecorder.addEventListener("stop", function () {
         handleData(new Blob(recordedChunks, { type: "audio/mp3" }));
       });
-    };
+    });
+
     mediaRecorder.start();
     setTimeout(() => {
       mediaRecorder.stop();
@@ -40,6 +53,7 @@ export default function Recorder(props) {
   };
 
   const handleData = (blob) => {
+    console.log(blob);
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = () => {

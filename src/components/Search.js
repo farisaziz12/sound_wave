@@ -14,7 +14,10 @@ export default function Search(props) {
     try {
       const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
-      setRecognition(new SpeechRecognition());
+      if (SpeechRecognition) {
+        setRecognition(new SpeechRecognition());
+      } else {
+      }
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +43,7 @@ export default function Search(props) {
         const transcript = event.results[current][0].transcript;
 
         setSearch(transcript);
-
+        setRecognitionError(false);
         search$.next(transcript);
       };
     }
@@ -49,8 +52,15 @@ export default function Search(props) {
 
   useEffect(() => {
     search$.next(search);
+
     // eslint-disable-next-line
   }, [search]);
+
+  useEffect(() => {
+    if (recognitionError) {
+      alert("There was a problem recognising your speech");
+    }
+  }, [recognitionError]);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -60,7 +70,9 @@ export default function Search(props) {
     if (audioPlayer) {
       audioPlayer.pause();
     }
-    recognition.start();
+    if (recognition) {
+      recognition.start();
+    }
   };
 
   return (

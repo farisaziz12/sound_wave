@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "audio-recorder-polyfill": "^0.3.6",
     "colorthief": "^2.3.2",
     "invert-color": "^2.0.0",
     "jquery": "^3.5.1",
@@ -14,6 +15,7 @@
     "react-dom": "^16.13.1",
     "react-lottie": "^1.2.3",
     "react-scripts": "3.4.3",
+    "react-speech-recognition": "^3.2.3",
     "rxjs": "^6.6.2"
   },
   "scripts": {
